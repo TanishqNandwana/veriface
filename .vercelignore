@@ -1,0 +1,24 @@
+# Vercel Deployment Exclusions
+venv/
+datasets/
+experiments/
+storage/
+forensic_reports/
+checkpoints/
+*.pth
+*.db
+*.sqlite
+*.sqlite3
+veriface.db
+*.pptx
+*.doc
+*.docx
+*.pdf
+tests/
+scripts/
+docs/
+backend/
+ml/
+node_modules/
+frontend/node_modules/
+.DS_Store
