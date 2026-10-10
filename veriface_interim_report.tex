@@ -1,0 +1,285 @@
+% VeriFace Interim Report
+% Content sourced from the supplied final report and arranged to follow the supplied interim-report format.
+
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+
+\hypersetup{hidelinks}
+\setstretch{1.15}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+% Chapter/section formatting
+\titleformat{\chapter}[display]
+  {\bfseries\centering\fontsize{16}{19}\selectfont}
+  {\MakeUppercase{\chaptertitlename}\ \thechapter}
+  {0.5em}{\fontsize{16}{19}\selectfont}
+\titleformat{\section}
+  {\bfseries\fontsize{14}{17}\selectfont}{\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\bfseries\fontsize{13}{16}\selectfont}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+
+\begin{document}
+
+% -------------------- TITLE PAGE --------------------
+\begin{titlepage}
+\centering
+
+\vspace*{0.25cm}
+{\fontsize{24}{29}\selectfont\bfseries VeriFace --- Verify the Media.\par}
+{\fontsize{24}{29}\selectfont\bfseries Reveal the Truth.\par}
+{\fontsize{18}{22}\selectfont\bfseries Multimodal AI Deepfake Detection \& Media Forensics Platform\par}
+
+\vspace{1.0cm}
+{\fontsize{16}{19}\selectfont\bfseries Interim Report\par}
+
+\vspace{0.65cm}
+{\fontsize{12}{14}\selectfont\bfseries Submitted To\par}
+
+\vspace{0.35cm}
+\IfFileExists{nmims_logo.png}{
+  \includegraphics[width=0.23\textwidth]{nmims_logo.png}\par
+}{\vspace{2.8cm}}
+
+{\fontsize{12}{14}\selectfont\bfseries
+SVKM's NMIMS,\par
+Mukesh Patel School of Technology Management \& Engineering,\par
+Shirpur Campus (M.H.)\par}
+
+\vspace{0.65cm}
+{\fontsize{12}{14}\selectfont\bfseries Submitted By\par}
+\vspace{0.25cm}
+{\fontsize{14}{17}\selectfont\bfseries
+Tanishq Nandwana, Divyanshu Kumbe, Yanshu Baria\par}
+
+\vspace{0.65cm}
+{\fontsize{12}{14}\selectfont\bfseries Under The Supervision of\par}
+\vspace{0.25cm}
+{\fontsize{14}{17}\selectfont\bfseries Dr. Varsha Nemade\par}
+{\fontsize{14}{17}\selectfont\bfseries Project Mentor, Department of Computer Science\par}
+
+\vfill
+
+{\fontsize{14}{17}\selectfont\bfseries DEPARTMENT OF COMPUTER SCIENCE\par}
+{\fontsize{12}{14}\selectfont\bfseries Mukesh Patel School of Technology Management \& Engineering\par}
+{\fontsize{12}{14}\selectfont\bfseries ACADEMIC SESSION: 2026--27\par}
+
+\end{titlepage}
+
+% -------------------- TABLE OF CONTENTS --------------------
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+% =========================================================
+\chapter{INTRODUCTION}
+
+\section{Background}
+Recent breakthroughs in generative artificial intelligence---specifically Diffusion Models, Generative Adversarial Networks (GANs), Neural Radiance Fields (NeRFs), and Neural Vocoder Text-to-Speech (TTS) synthesizers---have made high-fidelity facial manipulation, video re-enactment, and voice cloning accessible to non-experts. Manipulated digital media poses severe societal risks including political disinformation, financial extortion, corporate identity theft, and legal evidence tampering. VeriFace is an integrated multimodal artificial intelligence platform designed to detect synthetic manipulations across images, videos, and audio streams.
+
+\section{Motivation and Scope}
+Existing forensic detectors operate in isolated single-modality silos (e.g. image-only or audio-only detectors), overfit to specific generator distributions, fail when media undergoes lossy social media compression, and act as opaque black-box classifiers without forensic explanations. The scope of VeriFace is to unify Vision Transformers, style latent flows, and graph attention audio networks into a single production-ready platform that outputs calibrated confidence verdicts, suspicious spatial/temporal evidence, and downloadable PDF forensic reports.
+
+\section{Problem Statement}
+Current state-of-the-art deepfake detection systems exhibit three primary shortcomings:
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+    \item \textbf{Single-Modality Limitation:} Inability to evaluate multimodal attacks (e.g. video re-enactment paired with cloned voice audio).
+    \item \textbf{Poor Generalization:} Degradation when deployed on unseen forgery generators or perturbed media.
+    \item \textbf{Black-Box Classification:} Lack of human-interpretable forensic localization (bounding boxes, Grad-CAM heatmaps, temporal timeline scores, audio segment saliency).
+\end{enumerate}
+
+\section{Proposed Solution}
+VeriFace provides a unified multimodal architecture featuring:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Image Branch:} Forgery-Aware Adaptive Vision Transformer (FA-ViT) incorporating Global Adaptive Modules (GAM), Local Adaptive Modules (LAM), Fine-grained Adaptive Learning (FAL) loss, and FFT high-frequency spectral forensic cues.
+    \item \textbf{Video Branch:} Style Latent Flow framework integrating pSp W+ latent space inversion, temporal style diffs $\Delta S$, StyleGRU, 3D ResNet-50 visual content representations, Style Attention Modules (SAM), and Temporal Transformer Encoders (TTE).
+    \item \textbf{Audio Branch:} Contrastive Learning Audio Deepfake Detector (CLAD) combining AASIST spectro-temporal graph attention, MoCo contrastive learning with manipulation augmentations, length loss, and derivative kurtosis discontinuity metrics.
+    \item \textbf{Unified Platform:} FastAPI backend, PostgreSQL/SQLite case logging, ReportLab PDF report generation, and a modern React glassmorphism frontend.
+\end{itemize}
+
+\section{Organization of Report}
+The report is organized into six core chapters: Section 2 conducts a comprehensive literature survey and identifies research gaps. Section 3 presents the system architecture, mathematical formulations, and engineering pipeline. Section 4 provides rigorous empirical benchmark results. Section 5 evaluates advantages, operational limitations, and real-world deployment domains. Section 6 concludes with findings and strategic future enhancements.
+
+% =========================================================
+\chapter{LITERATURE SURVEY}
+
+\section{Review of Current Work}
+
+\subsection{Image Modality --- FA-ViT}
+Luo et al. introduced the Forgery-Aware Adaptive Vision Transformer. By freezing pretrained ViT parameters and inserting lightweight Global Adaptive Modules (GAM) and Local Adaptive Modules (LAM) with zero-initialization, FA-ViT preserves general vision representations while learning subtle forgery traces. Fine-grained Adaptive Learning (FAL) circle loss optimizes subtle forgery pair separation. Reported cross-dataset accuracy reached 93.83\% AUC on Celeb-DF.
+
+\subsection{Video Modality --- Style Latent Flows}
+Choi et al. proposed exploiting StyleGAN W+ latent space trajectories for generalizable deepfake video detection. By computing temporal style differences $\Delta S_t = S_{t+1}-S_t$, feeding them to StyleGRU, and cross-attending with 3D ResNet visual features using Style Attention (SAM), the network captures non-linear latent manipulation traces. The model achieved 95.8\% average cross-dataset AUC.
+
+\subsection{Audio Modality --- CLAD}
+Wu et al. introduced CLAD, a robust audio deepfake detector. CLAD uses AASIST graph attention encoders combined with MoCo contrastive learning and length loss under realistic manipulation augmentations (noise, volume gain, fading, time stretch, resampling). CLAD achieved False Alarm Rates below 1.63\% under severe acoustic perturbations.
+
+\section{Identifying Gaps}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Gap 1 (Unimodal Isolation):} Prior art treats image, video, and audio in silos. VeriFace unifies them into a multi-branch system with automated late fusion.
+    \item \textbf{Gap 2 (Upsampling Checkerboard Blindness):} Standard ViTs miss frequency grids; resolved via 2D Fourier high-frequency azimuthal masking.
+    \item \textbf{Gap 3 (Temporal PRNU Coherence):} Video models ignore camera sensor noise destruction; resolved by cross-frame Laplacian PRNU fluctuation metrics.
+    \item \textbf{Gap 4 (Acoustic Phase Discontinuity):} Vocoder frame clicks are missed by standard spectrogram CNNs; resolved via vectorized derivative kurtosis.
+    \item \textbf{Gap 5 (Lack of Audit Artifacts):} Absence of standardized forensic reports; resolved by cryptographic SHA-256 PDF report generation.
+\end{itemize}
+
+% =========================================================
+\chapter{METHODOLOGY}
+
+\section{System Architecture \& Flowcharts}
+VeriFace implements a tiered routing architecture. Media files ingested via the React SPA are streamed to FastAPI, where MIME types and SHA-256 hashes are extracted. Media is routed to specialized branches (FA-ViT for images, Style Latent Flows for videos, and CLAD for audio). For videos containing audio tracks, FFmpeg automatically demuxes the acoustic stream for media-aware late fusion (60\% Visual, 40\% Audio). Analysis results are persisted in PostgreSQL/SQLite and compiled into formal forensic PDF reports.
+
+\section{Hardware and Software Description}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Hardware:} Apple Silicon Mac (M-Series unified memory architecture) with Metal Performance Shaders (MPS) GPU acceleration and CPU fallback.
+    \item \textbf{Deep Learning Frameworks:} PyTorch 2.14+, Torchvision 0.29+, Torchaudio 2.11+, Timm.
+    \item \textbf{Signal Processing \& Audio:} Librosa 1.0+, SoundFile 0.14+, OpenCV 5.0+, Pillow 12.3+, NumPy, SciPy.
+    \item \textbf{Web Backend \& Database:} FastAPI 0.141+, Uvicorn 0.52+, SQLAlchemy 2.0+ ORM, SQLite / PostgreSQL.
+    \item \textbf{Report Generation:} ReportLab 5.0+ producing cryptographic, tamper-evident PDF audit certificates.
+    \item \textbf{Web Frontend:} React 18.2, Vite 5.4, Lucide Icons, Glassmorphism design system.
+\end{itemize}
+
+\section{Algorithm \& Data Structures}
+
+\subsection{FA-ViT \& Stable FAL Circle Loss}
+Input face crops are mapped to patch tokens $H$. The adapted representation is
+\[
+H' = H + GAM(H) + LAM(H).
+\]
+Circle loss enforces intraclass compactness and interclass margin. Numerical stability is guaranteed via the LogSumExp softplus formulation:
+\[
+L_{\mathrm{FAL}} =
+\operatorname{softplus}\left(
+\operatorname{logsumexp}(-\gamma \alpha_p(s_p-\delta_p))
++
+\operatorname{logsumexp}(\gamma \alpha_n(s_n-\delta_n))
+\right).
+\]
+
+\subsection{2D Fourier Azimuthal Frequency Masking}
+The 2D FFT magnitude spectrum is partitioned into 18 radial sectors between $0.2r_{\max}$ and $0.8r_{\max}$. Azimuthal variance across sectors isolates generative AI upsampling grid peaks with $>80\times$ contrast.
+
+\subsection{Style Latent Flows}
+Video frames are inverted into StyleGAN W+ latent codes $S_t \in \mathbb{R}^{18\times512}$. Style differences
+\[
+\Delta S_t = S_{t+1}-S_t
+\]
+are processed via StyleGRU and attended to 3D ResNet-50 features via Style Attention (SAM) and Temporal Transformer Encoders (TTE).
+
+\subsection{Audio Forensic Signals}
+The audio branch evaluates AASIST graph attention embeddings ensembled with excess derivative kurtosis ($\kappa>4.0$ for synthetic clicks) and spectral flatness ($SF>0.40$ for vocoder noise).
+
+% =========================================================
+\chapter{RESULT AND ANALYSIS}
+
+The VeriFace platform underwent comprehensive empirical benchmarking across all three modalities. The table below presents the quantitative performance metrics achieved on held-out test splits.
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.35cm} >{\raggedright\arraybackslash}p{4.0cm} c c c c c c c}
+\caption{Empirical benchmark results across the three modalities.}\\
+\toprule
+\textbf{Modality} & \textbf{Model Configuration} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{ROC-AUC} & \textbf{EER} & \textbf{Latency}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Modality} & \textbf{Model Configuration} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{ROC-AUC} & \textbf{EER} & \textbf{Latency}\\
+\midrule
+\endhead
+Image & Vanilla ViT-B/16 Baseline & 0.9167 & 0.9091 & 0.9091 & 0.9091 & 0.9444 & 0.0833 & 14.2 ms\\
+Image & ViT + GAM (Global Context) & 0.9583 & 0.9545 & 0.9545 & 0.9545 & 0.9722 & 0.0417 & 15.1 ms\\
+Image & FA-ViT (GAM + LAM + FAL + FFT) & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 0.0000 & 18.5 ms\\
+Video & 3D ResNet-50 Baseline & 0.8333 & 0.8000 & 0.8000 & 0.8000 & 0.8889 & 0.1667 & 42.0 ms\\
+Video & StyleGRU Trajectory Only & 0.8889 & 0.8750 & 0.8750 & 0.8750 & 0.9167 & 0.1111 & 35.0 ms\\
+Video & Style Latent Flows (Full Pipeline) & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 0.0000 & 68.4 ms\\
+Audio & RawNet2 Baseline & 0.7500 & 0.7143 & 0.7143 & 0.7143 & 0.7778 & 0.2500 & 12.0 ms\\
+Audio & AASIST Baseline & 0.8333 & 0.8000 & 0.8000 & 0.8000 & 0.8611 & 0.1667 & 14.5 ms\\
+Audio & CLAD (AASIST + Forensic Ensemble) & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 0.0000 & 18.8 ms\\
+\bottomrule
+\end{longtable}
+
+\section*{Diagnostic Verification Highlights}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Image Diagnostic:} Real Photo $\rightarrow$ 90.41\% Real confidence; ChatGPT / AI Image $\rightarrow$ 98.23\% Manipulated confidence.
+    \item \textbf{Video Diagnostic:} Real Video $\rightarrow$ 96.63\% Real confidence; Deepfake Video $\rightarrow$ 90.33\% Manipulated confidence.
+    \item \textbf{Audio Diagnostic:} Real Human Voice $\rightarrow$ 93.47\% Real confidence; Cloned Speech $\rightarrow$ 98.30\% Manipulated confidence.
+    \item \textbf{Automated Test Suite:} 7/7 unit and integration tests passed in 15.4 seconds.
+\end{itemize}
+
+% =========================================================
+\chapter{ADVANTAGE, LIMITATIONS AND APPLICATIONS}
+
+\section{Advantages}
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+    \item \textbf{Unified Multimodal Platform:} Evaluates Images, Videos, and Audio within one cohesive user interface.
+    \item \textbf{Multi-Tier Explainability:} Outputs spatial Grad-CAM heatmaps, temporal suspicion timelines, and audio segment saliencies.
+    \item \textbf{Automated Cryptographic Reporting:} Generates SHA-256 verified PDF forensic reports for legal and audit compliance.
+    \item \textbf{Hardware Efficiency:} Native Apple Silicon GPU acceleration with sub-100ms inference times without external cloud APIs.
+\end{enumerate}
+
+\section{Limitations}
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+    \item \textbf{Extreme Lossy Compression:} Severe video downsampling (below 360p) may attenuate fine-grained Fourier grid peaks.
+    \item \textbf{Multi-Subject Crowds:} Primary face tracking focuses on the largest detected face; multi-identity crowds require additional tracking overhead.
+    \item \textbf{Long Video Processing:} Clips longer than 15 minutes require asynchronous batch queueing.
+\end{enumerate}
+
+\section{Applications}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Journalism \& Fact-Checking:} Rapid pre-publication verification of viral citizen media.
+    \item \textbf{Legal \& Law Enforcement:} Digital forensics evidence verification for judicial proceedings.
+    \item \textbf{Financial e-KYC:} Anti-spoofing verification during remote banking account onboarding.
+    \item \textbf{Voice Biometrics:} Defending enterprise authentication systems against voice clone replay attacks.
+\end{itemize}
+
+% =========================================================
+\chapter{CONCLUSION AND FUTURE SCOPE}
+
+\section{Conclusions}
+The VeriFace capstone project successfully demonstrates an integrated multimodal deepfake detection and media forensics system. By uniting FA-ViT, Style Latent Flows, and CLAD within a high-performance FastAPI and React platform, the system delivers 100\% classification accuracy on benchmark splits, sub-100ms latencies, explainable forensic visualizations, and tamper-evident PDF reporting.
+
+\section{Future Scope}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Real-Time Streaming Verification:} WebRTC integration for live video call interception (Zoom/Teams).
+    \item \textbf{Multi-Identity Tracking:} ByteTrack spatial-temporal face tracking for multi-person video scenes.
+    \item \textbf{Audio-Visual Lip Synchronization:} Cross-modal SyncNet architectures detecting phoneme-viseme desynchronization.
+    \item \textbf{Cloud-Native Deployment:} Containerized Docker/Kubernetes deployment for elastic horizontal scaling.
+\end{itemize}
+
+% =========================================================
+\chapter*{REFERENCES}
+\addcontentsline{toc}{chapter}{REFERENCES}
+
+\begin{enumerate}[label=\arabic*.,leftmargin=*]
+    \item A. Luo, R. Cai, C. Kong, Y. Ju, X. Kang, J. Huang, and A. C. Kot, ``Forgery-Aware Adaptive Learning With Vision Transformer for Generalized Face Forgery Detection,'' \textit{IEEE Transactions on Circuits and Systems for Video Technology}, vol. 35, no. 5, pp. 4120--4134, 2025.
+    \item J. Choi, T. Kim, Y. Jeong, S. Baek, and J. Choi, ``Exploiting Style Latent Flows for Generalizing Deepfake Video Detection,'' \textit{Proceedings of the IEEE/CVF CVPR}, pp. 27812--27822, 2024.
+    \item H. Wu, J. Chen, R. Du, C. Wu, K. He, X. Shang, H. Ren, and G. Xu, ``CLAD: Robust Audio Deepfake Detection Against Manipulation Attacks with Contrastive Learning,'' arXiv:2404.15854, 2024.
+    \item J. Jung, H.-S. Heo, H. Tak, H.-J. Shim, J. S. Chung, B.-J. Lee, H.-J. Yu, and N. Evans, ``AASIST: Audio Anti-Spoofing Using Integrated Spectro-Temporal Graph Attention Networks,'' \textit{IEEE ICASSP}, pp. 6367--6371, 2022.
+    \item E. Richardson, Y. Alaluf, O. Patashnik, Y. Nitzan, Y. Azjan, S. Shaham, and D. Cohen-Or, ``Encoding in Style: a StyleGAN Encoder for Image-to-Image Translation,'' \textit{IEEE/CVF CVPR}, pp. 2287--2296, 2021.
+    \item A. Rossler, D. Cozzolino, L. Verdoliva, C. Riess, J. Thies, and M. Niessner, ``FaceForensics++: Learning to Detect Manipulated Facial Images,'' \textit{IEEE/CVF ICCV}, pp. 1--11, 2019.
+    \item J. Frank, T. Eisenhofer, L. Schönherr, A. Fischer, D. Kolossa, and T. Holz, ``Leveraging Frequency Analysis for Deep Fake Image Recognition,'' \textit{ICML}, PMLR, pp. 3247--3258, 2020.
+    \item Y. Li, X. Yang, P. Sun, H. Qi, and S. Lyu, ``Celeb-DF: A Large-scale Challenging Dataset for DeepFake Forensics,'' \textit{IEEE/CVF CVPR}, pp. 3207--3216, 2020.
+\end{enumerate}
+
+\end{document}

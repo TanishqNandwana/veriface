@@ -1,0 +1,10 @@
+{
+  "name": "veriface",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multimodal AI Deepfake Detection & Media Forensics",
+  "scripts": {
+    "build": "npm --prefix frontend run build",
+    "dev": "npm --prefix frontend run dev"
+  }
+}

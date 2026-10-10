@@ -1,0 +1,70 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Caches and tests
+.pytest_cache/
+.coverage
+htmlcov/
+.cache
+
+# Environments & virtualenvs
+venv/
+env/
+.venv/
+ENV/
+
+# Node & Frontend dependencies
+node_modules/
+frontend/node_modules/
+dist/
+frontend/dist/
+.npm
+npm-debug.log*
+
+# Vercel deployment cache
+.vercel/
+
+# Environment and secrets
+.env
+.env.*
+.env.local
+!.env.example
+!frontend/.env.example
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+veriface.db
+
+# Runtime uploads, media storage & generated forensic reports
+storage/
+forensic_reports/
+test_tmp.jpg
+
+# Large datasets & experimental training runs
+datasets/
+experiments/
+
+# Oversized model checkpoints (>50MB / >100MB)
+# Note: Active production models (efficientnet_b0 16MB, frame_cnn_bigru 906KB, clad_full_model 702KB)
+# and lightweight baselines are tracked in Git.
+checkpoints/image/fa_vit_gam_lam_fft_fal_best.pth
+checkpoints/image/vanilla_vit_b_16_best.pth
+checkpoints/image/resnet_50_best.pth
+checkpoints/video/style_latent_flow_video_model_full_best.pth
+
+# Operating system & editor files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+~$*
+*.swp
+*.swo
