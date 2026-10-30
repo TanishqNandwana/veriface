@@ -29,7 +29,7 @@ export default function ResultView({ result }) {
         </div>
 
         <a
-          href={getApiUrl(`/api/reports/${result.case_id}`)}
+          href={result.printable_report_url || getApiUrl(`/api/reports/${result.case_id}`)}
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary"

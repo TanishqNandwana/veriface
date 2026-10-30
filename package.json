@@ -5,6 +5,7 @@
   "description": "Multimodal AI Deepfake Detection & Media Forensics",
   "scripts": {
     "build": "npm --prefix frontend run build",
-    "dev": "npm --prefix frontend run dev"
+    "dev": "npm --prefix frontend run dev",
+    "dev:backend": "PYTHONPATH=. venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload"
   }
 }

@@ -55,7 +55,7 @@ export default function HistoryTable({ cases, onSelectCase }) {
                   </td>
                   <td style={{ padding: '12px' }}>
                     <a
-                      href={getApiUrl(`/api/reports/${c.case_id}`)}
+                      href={c.printable_report_url || getApiUrl(`/api/reports/${c.case_id}`)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-outline"
