@@ -102,6 +102,41 @@ class FrameBiGRUTemporalModel(nn.Module):
         v_logits = self.head(gru_out.mean(dim=1)) # [B, 1]
         return v_logits, f_logits
 
+class EfficientNetBiGRUVideoModel(nn.Module):
+    """
+    High-accuracy Spatial-Temporal Video Deepfake Model:
+    Combines pretrained EfficientNet-B0 frame feature extraction with
+    Bidirectional GRU recurrent temporal aggregator.
+    """
+    def __init__(self, embed_dim: int = 128):
+        super().__init__()
+        from torchvision.models import efficientnet_b0, EfficientNet_B0_Weights
+        base = efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
+        self.backbone = base.features
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.proj = nn.Linear(1280, embed_dim)
+        self.gru = nn.GRU(embed_dim, embed_dim // 2, batch_first=True, bidirectional=True)
+        self.head = nn.Sequential(
+            nn.Dropout(0.3),
+            nn.Linear(embed_dim, 64),
+            nn.GELU(),
+            nn.Linear(64, 1)
+        )
+
+    def forward(self, x):
+        # x: [B, T, 3, 224, 224]
+        B, T, C, H, W = x.shape
+        x_flat = x.view(B * T, C, H, W)
+        feats = self.backbone(x_flat)
+        pooled = self.pool(feats).flatten(1) # [B*T, 1280]
+        proj = torch.relu(self.proj(pooled))
+        proj_seq = proj.view(B, T, -1) # [B, T, embed_dim]
+        gru_out, h_n = self.gru(proj_seq) # [B, T, embed_dim]
+        v_feat = torch.cat([h_n[-2], h_n[-1]], dim=-1) # [B, embed_dim]
+        v_logits = self.head(v_feat)
+        f_logits = self.head(gru_out) # [B, T, 1]
+        return v_logits, f_logits
+
 if __name__ == "__main__":
     model = StyleLatentFlowVideoModel()
     dummy_video = torch.randn(2, 8, 3, 224, 224) # B=2, T=8

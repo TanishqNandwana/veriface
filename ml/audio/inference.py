@@ -18,12 +18,20 @@ class AudioInferenceEngine:
     def __init__(self, checkpoint_path: str = None):
         self.device = get_device()
         
-        default_ckpt = "checkpoints/audio/clad_full_model_aasist___contrastive___lengthloss_best.pth"
-        if checkpoint_path is None and os.path.exists(default_ckpt):
-            checkpoint_path = default_ckpt
+        default_candidates = [
+            "checkpoints/audio/aasist_combined_multidataset_best.pth",
+            "checkpoints/audio/aasist_baseline_classifier_best.pth",
+            "checkpoints/audio/clad_combined_multidataset_best.pth",
+            "checkpoints/audio/clad_full_model_aasist___contrastive___lengthloss_best.pth"
+        ]
+        if checkpoint_path is None:
+            for cand in default_candidates:
+                if os.path.exists(cand):
+                    checkpoint_path = cand
+                    break
             
         self.checkpoint_path = checkpoint_path
-        self.model_name = "CLAD (Contrastive Learning Audio Deepfake Detector)"
+        self.model_name = "AASIST Spectro-Temporal Audio Classifier"
         
         if checkpoint_path and os.path.exists(checkpoint_path):
             state_dict = torch.load(checkpoint_path, map_location=self.device)
@@ -33,11 +41,11 @@ class AudioInferenceEngine:
                 self.model = SpectrogramCNNBaseline(in_channels=1, embed_dim=128).to(self.device)
                 self.model.load_state_dict(state_dict)
                 self.model_name = "Spectrogram CNN Audio Classifier"
-            elif "aasist_baseline" in ckpt_lower:
+            elif "aasist" in ckpt_lower:
                 from ml.audio.baselines import AASISTBaselineClassifier
                 self.model = AASISTBaselineClassifier(embed_dim=128).to(self.device)
                 self.model.load_state_dict(state_dict)
-                self.model_name = "AASIST Spectro-Temporal Audio Classifier"
+                self.model_name = "AASIST Combined Multi-Dataset Classifier"
             else:
                 self.model = CLADModel(in_channels=1, embed_dim=128).to(self.device)
                 self.model.load_state_dict(state_dict)

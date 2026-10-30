@@ -1,0 +1,171 @@
+version: "2.0"
+storage_root: "~/VeriFaceStorage/datasets"
+registry:
+  # ==========================================
+  # IMAGE MODALITY DATASETS
+  # ==========================================
+  real_vs_fake_faces_zenodo:
+    name: "Real vs Fake Faces Balanced Dataset (RVF10K Restructured)"
+    modality: "image"
+    source_url: "https://zenodo.org/records/14532968"
+    download_url: "https://zenodo.org/records/14532968/files/Real%20vs%20Fake%20Faces.zip?download=1"
+    task: "Binary Classification (Authentic Real Faces vs AI Synthetic Faces)"
+    label_definitions:
+      "0": "Real (NVIDIA Flickr Faces HQ - FFHQ)"
+      "1": "Fake (Bojan Tunguz 1M Fake Faces - StyleGAN Synthesis)"
+    total_samples: 10000
+    compressed_size_mb: 1094.8
+    extracted_size_mb: 1150.0
+    license: "Creative Commons Attribution 4.0 International (CC-BY-4.0)"
+    access_requirements: "Open Public Direct Download (No authentication required)"
+    official_splits:
+      train_ratio: 0.70
+      val_ratio: 0.15
+      test_ratio: 0.15
+    preprocessing:
+      resolution: [224, 224]
+      normalization: "imagenet"
+      face_detection: "haarcascade / MTCNN alignment"
+    compatibility: "Directly compatible with EfficientNet, ResNet, ViT, and FA-ViT"
+    priority_rank: 1
+
+  celeb_df_v2_image:
+    name: "Celeb-DF v2 Face Crops Benchmark"
+    modality: "image"
+    source_url: "https://github.com/yuezunli/celeb-deepfakeforensics"
+    task: "Face Swap & Splicing Forgery Detection"
+    label_definitions:
+      "0": "Real (Authentic YouTube Celebrity Frames)"
+      "1": "Fake (Celeb-DF DeepFake Face Swaps)"
+    total_samples: 400
+    compressed_size_mb: 4.8
+    extracted_size_mb: 4.8
+    license: "Research & Non-Commercial Academic Use"
+    access_requirements: "Pre-ingested verified clean benchmark"
+    official_splits:
+      train: 268
+      validation: 61
+      test: 71
+    preprocessing:
+      resolution: [224, 224]
+      normalization: "imagenet"
+    compatibility: "High (Used in initial baseline optimization)"
+    priority_rank: 2
+
+  faceforensics_c23_subset:
+    name: "FaceForensics++ C23 Compression Subset"
+    modality: "image"
+    source_url: "https://github.com/ondyari/FaceForensics"
+    task: "Multi-Generator Facial Manipulation Detection (Deepfakes, Face2Face, FaceSwap, NeuralTextures)"
+    label_definitions:
+      "0": "Real (Pristine YouTube Faces)"
+      "1": "Fake (Manipulated by 4 synthesis algorithms)"
+    total_samples: 2000
+    compressed_size_mb: 850.0
+    extracted_size_mb: 950.0
+    license: "TUM Terms of Use Agreement"
+    access_requirements: "Official TUM Agreement Form required for raw; curated mirrors on HuggingFace (bitmind/FaceForensicsC23)"
+    preprocessing:
+      resolution: [224, 224]
+      normalization: "imagenet"
+    compatibility: "High (Ideal for multi-method generalization)"
+    priority_rank: 3
+
+  # ==========================================
+  # VIDEO MODALITY DATASETS
+  # ==========================================
+  celeb_df_video_clips:
+    name: "Celeb-DF v2 Temporal Video Benchmark"
+    modality: "video"
+    source_url: "https://github.com/yuezunli/celeb-deepfakeforensics"
+    task: "Temporal Video Deepfake Detection"
+    label_definitions:
+      "0": "Real (Authentic YouTube Celebrity Video Sequences)"
+      "1": "Fake (DeepFaceLab Synthesis)"
+    total_samples: 76
+    compressed_size_mb: 218.2
+    extracted_size_mb: 218.2
+    license: "Academic Research Use"
+    access_requirements: "Curated zero-leakage benchmark"
+    official_splits:
+      train: 53
+      validation: 11
+      test: 12
+    preprocessing:
+      num_frames: 8
+      sampling: "uniform_temporal_stride"
+      resolution: [224, 224]
+    compatibility: "Native compatibility with Frame-BiGRU and 3D ResNet"
+    priority_rank: 1
+
+  dfdc_preview_subset:
+    name: "Deepfake Detection Challenge (DFDC) Preview Subset"
+    modality: "video"
+    source_url: "https://www.kaggle.com/competitions/deepfake-detection-challenge/data"
+    task: "In-the-Wild Video Deepfake Detection"
+    label_definitions:
+      "0": "Real (Actors under diverse illumination/angles)"
+      "1": "Fake (Multi-branch deepfake synthesis)"
+    total_samples: 400
+    compressed_size_mb: 1850.0
+    extracted_size_mb: 2200.0
+    license: "Kaggle Competition & Meta AI Research License"
+    access_requirements: "Kaggle API key or HuggingFace MTCNN derivative (oussema3002/dfdc-faces-mtcnn)"
+    preprocessing:
+      num_frames: 8
+      resolution: [224, 224]
+    compatibility: "High for cross-dataset generalization"
+    priority_rank: 2
+
+  # ==========================================
+  # AUDIO MODALITY DATASETS
+  # ==========================================
+  asvspoof_2019_la_subset:
+    name: "ASVspoof 2019 Logical Access (LA) Benchmark"
+    modality: "audio"
+    source_url: "https://datashare.ed.ac.uk/items/31074a11-b6f6-4e92-a4ad-07093f8c0c45"
+    mirror_url: "https://huggingface.co/datasets/SpeechAntiSpoofingBenchmarks/ASVspoof2019_LA"
+    task: "Logical Access Voice Anti-Spoofing (TTS & Voice Conversion)"
+    label_definitions:
+      "0": "Bona-fide (Authentic Human VCTK Speakers)"
+      "1": "Spoof (TTS algorithms A01–A19)"
+    total_samples: 500
+    compressed_size_mb: 250.0
+    extracted_size_mb: 320.0
+    license: "Open Academic Challenge License"
+    access_requirements: "Direct via SpeechAntiSpoofingBenchmarks/ASVspoof2019_LA or University of Edinburgh DataShare"
+    official_splits:
+      train_partition: "train"
+      dev_partition: "dev"
+      eval_partition: "eval"
+    preprocessing:
+      sample_rate: 16000
+      channels: 1
+      duration_sec: 4.0
+      n_mels: 80
+    compatibility: "Native compatibility with CLAD and AASIST encoders"
+    priority_rank: 1
+
+  wavefake_tts_audio:
+    name: "WaveFake Multi-Generator Voice Synthesis Benchmark"
+    modality: "audio"
+    source_url: "https://github.com/joisino/wavefake"
+    task: "Neural Vocoder Deepfake Detection"
+    label_definitions:
+      "0": "Real (LJSpeech / Human Speech)"
+      "1": "Fake (MelGAN, HiFi-GAN, WaveGlow, Parallel WaveGAN)"
+    total_samples: 100
+    compressed_size_mb: 12.2
+    extracted_size_mb: 12.2
+    license: "Creative Commons Attribution"
+    access_requirements: "Pre-ingested clean benchmark"
+    official_splits:
+      train: 70
+      validation: 10
+      test: 20
+    preprocessing:
+      sample_rate: 16000
+      channels: 1
+      duration_sec: 4.0
+    compatibility: "High (Used in CLAD and AASIST training)"
+    priority_rank: 2

@@ -31,14 +31,29 @@ _inference_engine = None
 def get_inference_engine():
     global _inference_engine
     if _inference_engine is None:
-        img_ckpt = "checkpoints/image/efficientnet_b0_best.pth"
-        vid_ckpt = "checkpoints/video/frame_cnn___bigru_temporal_aggregator_best.pth"
-        aud_ckpt = "checkpoints/audio/clad_full_model_aasist___contrastive___lengthloss_best.pth"
+        img_candidates = [
+            "checkpoints/image/efficientnet_b0_combined_multidataset_best.pth",
+            "checkpoints/image/efficientnet_b0_best.pth"
+        ]
+        img_ckpt = next((c for c in img_candidates if os.path.exists(c)), None)
+        
+        vid_candidates = [
+            "checkpoints/video/efficientnet_bigru_combined_best.pth",
+            "checkpoints/video/frame_cnn___bigru_temporal_aggregator_best.pth"
+        ]
+        vid_ckpt = next((c for c in vid_candidates if os.path.exists(c)), None)
+        
+        aud_candidates = [
+            "checkpoints/audio/aasist_combined_multidataset_best.pth",
+            "checkpoints/audio/clad_combined_multidataset_best.pth",
+            "checkpoints/audio/clad_full_model_aasist___contrastive___lengthloss_best.pth"
+        ]
+        aud_ckpt = next((c for c in aud_candidates if os.path.exists(c)), None)
         
         _inference_engine = MultimodalInferenceEngine(
-            image_checkpoint=img_ckpt if os.path.exists(img_ckpt) else None,
-            video_checkpoint=vid_ckpt if os.path.exists(vid_ckpt) else None,
-            audio_checkpoint=aud_ckpt if os.path.exists(aud_ckpt) else None
+            image_checkpoint=img_ckpt,
+            video_checkpoint=vid_ckpt,
+            audio_checkpoint=aud_ckpt
         )
     return _inference_engine
 

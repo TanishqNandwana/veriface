@@ -20,9 +20,17 @@ class VideoInferenceEngine:
         self.device = get_device()
         self.num_frames = num_frames
         
-        default_ckpt = "checkpoints/video/frame_cnn___bigru_temporal_aggregator_best.pth"
-        if checkpoint_path is None and os.path.exists(default_ckpt):
-            checkpoint_path = default_ckpt
+        candidates = [
+            "checkpoints/video/efficientnet_bigru_combined_best.pth",
+            "checkpoints/video/frame_cnn___bigru_temporal_aggregator_best.pth",
+            "checkpoints/video/3d_resnet_best.pth",
+            "checkpoints/video/style_latent_flow_best.pth"
+        ]
+        if checkpoint_path is None:
+            for cand in candidates:
+                if os.path.exists(cand):
+                    checkpoint_path = cand
+                    break
             
         self.checkpoint_path = checkpoint_path
         self.img_engine = ImageInferenceEngine()
@@ -30,7 +38,12 @@ class VideoInferenceEngine:
         if checkpoint_path and os.path.exists(checkpoint_path):
             state_dict = torch.load(checkpoint_path, map_location=self.device)
             ckpt_lower = checkpoint_path.lower()
-            if "bigru" in ckpt_lower or "frame_cnn" in ckpt_lower:
+            if "efficientnet_bigru" in ckpt_lower or "efficientnet" in ckpt_lower:
+                from ml.video.model import EfficientNetBiGRUVideoModel
+                self.model = EfficientNetBiGRUVideoModel(embed_dim=128).to(self.device)
+                self.model.load_state_dict(state_dict)
+                self.model_name = "EfficientNet-B0 + BiGRU Temporal Aggregator"
+            elif "bigru" in ckpt_lower or "frame_cnn" in ckpt_lower:
                 from ml.video.model import FrameBiGRUTemporalModel
                 self.model = FrameBiGRUTemporalModel(embed_dim=128).to(self.device)
                 self.model.load_state_dict(state_dict)
@@ -46,8 +59,9 @@ class VideoInferenceEngine:
                 self.model_name = "Style Latent Flows (pSp + StyleGRU + 3D ResNet + SAM + TTE)"
             print(f"[+] Loaded video model checkpoint from {checkpoint_path} ({self.model_name})")
         else:
-            self.model = StyleLatentFlowVideoModel(num_frames=num_frames, embed_dim=128).to(self.device)
-            self.model_name = "Style Latent Flows (Initialized)"
+            from ml.video.model import EfficientNetBiGRUVideoModel
+            self.model = EfficientNetBiGRUVideoModel(embed_dim=128).to(self.device)
+            self.model_name = "EfficientNet-B0 + BiGRU (Initialized)"
             print("[!] Running VideoInferenceEngine with initialized weights.")
             
         self.model.eval()

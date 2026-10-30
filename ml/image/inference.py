@@ -21,9 +21,17 @@ class ImageInferenceEngine:
     def __init__(self, checkpoint_path: str = None, depth: int = 2):
         self.device = get_device()
         
-        default_ckpt = "checkpoints/image/efficientnet_b0_best.pth"
-        if checkpoint_path is None and os.path.exists(default_ckpt):
-            checkpoint_path = default_ckpt
+        default_candidates = [
+            "checkpoints/image/efficientnet_b0_combined_multidataset_best.pth",
+            "checkpoints/image/efficientnet_b0_best.pth",
+            "checkpoints/image/fa_vit_combined_multidataset_best.pth",
+            "checkpoints/image/fa_vit_gam_lam_fft_fal_best.pth"
+        ]
+        if checkpoint_path is None:
+            for cand in default_candidates:
+                if os.path.exists(cand):
+                    checkpoint_path = cand
+                    break
             
         self.checkpoint_path = checkpoint_path
         self.model_name = "FA-ViT (Forgery-Aware Vision Transformer)"
