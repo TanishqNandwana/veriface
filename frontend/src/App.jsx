@@ -10,6 +10,7 @@ import {
   saveLocalCase,
   getLocalCases,
   generatePrintableReportUrl,
+  generateImageOverlay,
 } from './utils/forensicsEngine';
 
 export default function App() {
@@ -104,7 +105,23 @@ export default function App() {
         resultData = await analyzeMediaClientSide(file, modality);
       }
 
-      // Attach printable report URL for instant download
+      // Ensure affected region overlay is always generated and attached for images
+      if (modality === 'image') {
+        const currentOverlay = resultData.analysis_details?.explanation?.overlay_path;
+        const isDataUrl = currentOverlay && (currentOverlay.startsWith('data:image') || currentOverlay.startsWith('blob:'));
+        if (!isDataUrl) {
+          const isManipulated = resultData.verdict === 'manipulated';
+          const bbox = resultData.analysis_details?.bounding_box;
+          const overlayUrl = await generateImageOverlay(file, isManipulated, bbox);
+          if (overlayUrl) {
+            if (!resultData.analysis_details) resultData.analysis_details = {};
+            if (!resultData.analysis_details.explanation) resultData.analysis_details.explanation = {};
+            resultData.analysis_details.explanation.overlay_path = overlayUrl;
+          }
+        }
+      }
+
+      // Attach printable report URL for instant download (which embeds the affected region)
       resultData.printable_report_url = generatePrintableReportUrl(resultData);
 
       setCurrentResult(resultData);
